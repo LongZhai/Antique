@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+
+        <div class="media-body">
+
+        </div>
+      </div>
+        <form method="POST" action="" enctype="multipart/form-data" autocomplete="off">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">进货登记</legend>
+                <div class="form-group">
+                    {{ form.item_id.label(class="form-control-label") }}
+
+                    {% if form.item_id.errors %}
+                        {{ form.item_id(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.item_id.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.item_id(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.t_price.label(class="form-control-label") }}
+
+                    {% if form.t_price.errors %}
+                        {{ form.t_price(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.t_price.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.t_price(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+                <div class="form-group">
+                    {{ form.t_num.label(class="form-control-label") }}
+                    {% if form.t_num.errors %}
+                        {{ form.t_num(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.t_num.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.t_num(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+                <div class="form-group">
+                    {{ form.inv_date.label(class="form-control-label") }}
+                    {% if form.inv_date.errors %}
+                        {{ form.inv_date(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.inv_date.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.inv_date(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.picture.label() }}
+                    {{ form.picture(class="form-control-file") }}
+                    {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+
+         <h4>最近三条记录</h4>
+        <a href="{{ url_for('inventory_display') }}">更多记录</a>
+        <table style="width:100%">
+           <tr>
+            <th>图片</th>
+            <th>序号</th>
+            <th>货物标号</th>
+            <th>数量</th>
+            <th>单价</th>
+            <th>总价</th>
+            <th>剩余</th>
+            <th>总盈亏</th>
+            <th>日期</th>
+            <th>删除</th>
+           </tr>
+        {% for record in inventory_records %}
+
+
+          <tr>
+            <td><img class="article-img" src="{{ url_for('static', filename='profile_pics/' + record.image) }}"></td>
+            <td>{{record.id}}</td>
+            <td>{{record.item_id}}</td>
+            <td>{{record.how_many}}</td>
+            <td>{{record.u_price}}</td>
+            <td>{{record.t_price}}</td>
+            <td>{{record.remaining}}</td>
+            <td>{{record.revenue}}</td>
+            <td>{{record.date.strftime('%Y-%m-%d')}}</td>
+            <td><a href="{{ url_for('delete_inv', inv_id=record.id) }}">删除</a></td>
+          </tr>
+
+        {% endfor %}
+        </table>
+
+
+    </div>
+{% endblock content %}

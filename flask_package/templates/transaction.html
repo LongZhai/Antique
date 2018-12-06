@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+
+        <div class="media-body">
+
+        </div>
+      </div>
+        <form method="POST" action="" enctype="multipart/form-data" autocomplete="off">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">转账登记</legend>
+
+                <div class="form-group">
+                    {{ form.amount.label(class="form-control-label") }}
+
+                    {% if form.amount.errors %}
+                        {{ form.amount(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.amount.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.amount(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+                <div class="form-group">
+                    {{ form.trans_date.label(class="form-control-label") }}
+                    {% if form.trans_date.errors %}
+                        {{ form.trans_date(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.trans_date.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.trans_date(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+                <div class="form-group">
+                    {{ form.annotation.label(class="form-control-label") }}
+
+                    {% if form.annotation.errors %}
+                        {{ form.annotation(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.annotation.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.annotation(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.type.label(class="form-control-label") }}
+                    {% if form.type.errors %}
+                        {{ form.type(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.type.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.type(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+        <h4>最近三条记录</h4>
+        <a href="{{ url_for('transaction_display') }}">更多记录</a>
+        <table style="width:100%">
+          <tr>
+            <th>序号</th>
+            <th>金额</th>
+            <th>日期</th>
+            <th>明细</th>
+            <th>支出类型</th>
+            <th>删除</th>
+          </tr>
+        {% for i in transactions %}
+
+            <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.amount}}</td>
+            <td>{{i.date.strftime('%Y-%m-%d')}}</td>
+            <td>{{i.annotation}}</td>
+            <td>{{i.type}}</td>
+            <td><a href="{{ url_for('delete_trans', id=i.id) }}">删除</a></td>
+            </tr>
+
+
+        {% endfor %}
+        </table>
+    </div>
+{% endblock content %}

@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+
+        <div class="media-body">
+
+        </div>
+      </div>
+        <form method="POST" action="" enctype="multipart/form-data" autocomplete="off">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">销售登记</legend>
+                <div class="form-group">
+                    {{ form.item_id.label(class="form-control-label") }}
+
+                    {% if form.item_id.errors %}
+                        {{ form.item_id(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.item_id.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.item_id(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.t_price.label(class="form-control-label") }}
+
+                    {% if form.t_price.errors %}
+                        {{ form.t_price(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.t_price.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.t_price(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+                <div class="form-group">
+                    {{ form.t_num.label(class="form-control-label") }}
+                    {% if form.t_num.errors %}
+                        {{ form.t_num(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.t_num.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.t_num(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+
+                <div class="form-group">
+                    {{ form.sale_date.label(class="form-control-label") }}
+                    {% if form.sale_date.errors %}
+                        {{ form.sale_date(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.sale_date.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.sale_date(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+        <h4>最近三条记录</h4>
+        <a href="{{ url_for('sale_display') }}">更多记录</a>
+        <table style="width:100%">
+          <tr>
+            <th>图片</th>
+            <th>序号</th>
+            <th>货物标号</th>
+            <th>销售数量</th>
+            <th>销售单价</th>
+            <th>销售总价</th>
+            <th>进货单价</th>
+            <th>利润</th>
+            <th>删除</th>
+          </tr>
+        {% for sale in sales %}
+
+              <tr>
+                <td><img class="article-img" src="{{ url_for('static', filename='profile_pics/' + sale.stock.image) }}"></td>
+                <td>{{sale.id}}</td>
+                <td>{{sale.item_id}}</td>
+                <td>{{sale.how_many}}</td>
+                <td>{{sale.u_price}}</td>
+                <td>{{sale.t_price}}</td>
+                <td>{{sale.stock.u_price}}</td>
+                <td>{{sale.profit}}</td>
+                <td><a href="{{ url_for('delete_sale', sale_id=sale.id) }}">删除</a></td>
+              </tr>
+
+
+        {% endfor %}
+        </table>
+    </div>
+{% endblock content %}

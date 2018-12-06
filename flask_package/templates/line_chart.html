@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>西臣小店</title>
+    {% endif %}
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+</head>
+
+<body>
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a class="navbar-brand mr-4" href="{{ url_for('data_analysis') }}">盈亏分析</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
+              <a class="nav-item nav-link" href="{{ url_for('sale_display') }}">销售记录</a>
+              <a class="nav-item nav-link" href="{{ url_for('inventory_display') }}">进货记录</a>
+              <a class="nav-item nav-link" href="{{ url_for('transaction_display') }}">转款记录</a>
+            </div>
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+              {% if current_user.is_authenticated %}
+                 <a class="nav-item nav-link" href="/logout">退出</a>
+              {% else %}
+                  <a class="nav-item nav-link" href="/login">Login</a>
+                  <a class="nav-item nav-link" href="/register">Register</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-8">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          <center>
+            <div class="content-section">
+            <h1>{{ title }}</h1>
+
+            <canvas id="chart" width="600" height="400"></canvas>
+            <script>
+              // bar chart data
+              var barData = {
+                labels : [
+                  {% for item in labels %}
+                    "{{ item }}",
+                  {% endfor %}
+                ],
+                datasets : [{
+                  fillColor: "rgba(151,187,205,0.2)",
+                  strokeColor: "rgba(151,187,205,1)",
+                  pointColor: "rgba(151,187,205,1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(151,187,205,1)",
+                  bezierCurve : false,
+                  data : [
+                {% for item in values %}
+                      {{ item }},
+                    {% endfor %}]
+                  }
+            ]
+              }
+              Chart.defaults.global.animationSteps = 50;
+              Chart.defaults.global.tooltipYPadding = 16;
+              Chart.defaults.global.tooltipCornerRadius = 0;
+              Chart.defaults.global.tooltipTitleFontStyle = "normal";
+              Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+              Chart.defaults.global.animationEasing = "easeOutBounce";
+              Chart.defaults.global.responsive = false;
+              Chart.defaults.global.scaleLineColor = "black";
+              Chart.defaults.global.scaleFontSize = 16;
+              // get bar chart canvas
+              var mychart = document.getElementById("chart").getContext("2d");
+              steps = 10
+              max = {{ max }}
+              // draw bar chart
+              var LineChartDemo = new Chart(mychart).Line(barData, {
+                scaleOverride: true,
+                scaleSteps: steps,
+                scaleStepWidth: Math.ceil(max / steps),
+                scaleStartValue: 0,
+                scaleShowVerticalLines: true,
+                scaleShowGridLines : true,
+                barShowStroke : true,
+                scaleShowLabels: true,
+                bezierCurve: false,
+              });
+            </script>
+            </div>
+          </center>
+        </div>
+
+        <div class="col-md-4">
+          <div class="content-section">
+            <h3>销售/进货登记</h3>
+            <p class='text-muted'>You can put any information here you'd like.
+              <ul class="list-group">
+                <li class="list-group-item list-group-item-light"><a href="{{ url_for('inventory') }}">进货登记</a></li>
+                <li class="list-group-item list-group-item-light"><a href="{{ url_for('sales') }}">销售登记</a></li>
+                <li class="list-group-item list-group-item-light"><a href="{{ url_for('transactions') }}">转账登记</a></li>
+
+              </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

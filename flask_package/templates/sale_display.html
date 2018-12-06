@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+
+<table style="width:100%">
+      <tr>
+        <th>图片</th>
+        <th>序号</th>
+        <th>货物标号</th>
+        <th>销售数量</th>
+        <th>销售单价</th>
+        <th>销售总价</th>
+        <th>进货单价</th>
+        <th>利润</th>
+        <th>日期</th>
+        <th>删除</th>
+      </tr>
+    {% for sale in sales.items %}
+
+          <tr>
+            <td><img class="article-img" src="{{ url_for('static', filename='profile_pics/' + sale.stock.image) }}"></td>
+            <td>{{sale.id}}</td>
+            <td>{{sale.item_id}}</td>
+            <td>{{sale.how_many}}</td>
+            <td>{{sale.u_price}}</td>
+            <td>{{sale.t_price}}</td>
+            <td>{{sale.stock.u_price}}</td>
+            <td>{{sale.profit}}</td>
+            <td>{{sale.date.strftime('%Y-%m-%d')}}</td>
+            <td><a href="{{ url_for('delete_sale', sale_id=sale.id) }}">删除</a></td>
+          </tr>
+
+
+    {% endfor %}
+    </table>
+    {% for page_num in sales.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if sales.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('sale_display', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('sale_display', page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+
+{% endblock content %}

@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+
+<table style="width:100%">
+      <tr>
+        <th>图片</th>
+        <th>序号</th>
+        <th>货物标号</th>
+        <th>数量</th>
+        <th>单价</th>
+        <th>总价</th>
+        <th>剩余</th>
+        <th>总盈亏</th>
+        <th>日期</th>
+        <th>删除</th>
+      </tr>
+    {% for record in inv_record.items %}
+          <tr>
+            <td><img class="article-img" src="{{ url_for('static', filename='profile_pics/' + record.image) }}"></td>
+            <td>{{record.id}}</td>
+            <td>{{record.item_id}}</td>
+            <td>{{record.how_many}}</td>
+            <td>{{record.u_price}}</td>
+            <td>{{record.t_price}}</td>
+            <td>{{record.remaining}}</td>
+            <td>{{record.revenue}}</td>
+            <td>{{record.date.strftime('%Y-%m-%d')}}</td>
+            <td><a href="{{ url_for('delete_inv', inv_id=record.id) }}">删除</a></td>
+          </tr>
+
+
+    {% endfor %}
+    </table>
+    {% for page_num in inv_record.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if inv_record.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('inventory_display', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('inventory_display', page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+
+
+{% endblock content %}

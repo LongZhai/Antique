@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+<h3>店内现金： </h3>
+<table style="width:100%">
+      <tr>
+        <th>ID</th>
+        <th>日期</th>
+        <th>金额</th>
+        <th>明细</th>
+        <th>类型</th>
+        <th>删除</th>
+      </tr>
+    {% for i in transactions %}
+
+          <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.date.strftime('%Y-%m-%d')}}</td>
+            <td>{{i.amount}}</td>
+            <td>{{i.annotation}}</td>
+             <td>{{i.type}}</td>
+            <td><a href="{{ url_for('delete_trans', id=i.id) }}">删除</a></td>
+          </tr>
+
+
+    {% endfor %}
+    </table>
+
+{% endblock content %}

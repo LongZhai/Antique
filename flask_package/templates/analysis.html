@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+<h4>店内现金: {{data_list['remain_cash']}}</h4>
+<h4>进货投资: {{data_list['t_investment']}}</h4>
+<h4>总销售额: {{data_list['t_income']}}</h4>
+<h4>运营成本: {{data_list['operation_cost']}}</h4>
+<h4>消费/转款: {{data_list['trans_type_one']}}</h4>
+<h4>总盈亏: {{data_list['PL']}}</h4>
+<p>----------------------------------------------------------------------------------</p>
+
+<table style="width:100%">
+      <tr>
+        <th>近12个月销售</th>
+        <th>近12个月进货</th>
+        <th>店内货品件数</th>
+      </tr>
+      <tr>
+        <th><a href="{{ url_for('line', chart_type='sales') }}">{{amount[0]}}</a></th>
+        <th><a href="{{ url_for('line', chart_type='inv') }}">{{amount[1]}}</a></th>
+        <th><a href="{{ url_for('remaining_display') }}">{{amount[2]}}</a></th>
+      </tr>
+</table>
+</div>
+
+{% endblock content %}
