@@ -1,1 +1,1 @@
-# antique
+# antique shop inventory/sales management system
